@@ -1,0 +1,13 @@
+export(
+  dlasso
+  #plot.dlasso,
+  #coef.dlasso
+)
+
+S3method(plot, dlasso)
+S3method(coef, dlasso)
+
+
+importFrom("MASS", "ginv")
+importFrom("graphics", "abline", "legend", "matplot", "plot", "text")
+importFrom("stats", "cov", "dnorm", "pnorm", "runif", "sd")
