@@ -7,11 +7,21 @@ An implementation of dlasso using iterative ridge algorithm
 This function allows implementing differentiable lasso (dlasso) for arbitrary values of \eqn{\lambda} and s.
 }
 \usage{
-dlasso(x, y, s = 10^-5, intercept = FALSE,
-       lambda = -1, split = 50,
-       maxIter = 300, eps = 10^-9,
-       adj = 1.05, lowlambda = 10^-3,
-       digit = 4, trace = FALSE)
+dlasso (x,
+       y,
+       s  =  1           ,
+       intercept = FALSE ,
+       c  = 1            ,
+       adp = TRUE        ,
+       lambda = NULL     ,
+       split  = 50       ,
+       maxIter = 500     ,
+       adj = 1.1         ,
+       lowlambda = 10 ^ -3,
+       digit = 5          ,
+       cauchy = FALSE     ,
+       force = FALSE      ,
+       trace = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,39 +32,48 @@ dlasso(x, y, s = 10^-5, intercept = FALSE,
   Response vector
 }
   \item{s}{
-  dlasso precision. Default is 10^-5.
+  A single or a vector of precision value, s, given adp=FALSE. Default is 1. See "adp" parameter.
 }
   \item{intercept}{
   Logical flag. If TRUE, an intercept is included in the model, otherwise no intercept is included. Default is FALSE.
 }
-  \item{eps}{
-  The maximum error between two consecutive iterations before the loop breaks. Default is 10^-9.
+  \item{c}{
+  Choose between dlasso (c=1) and dSCAD (c=-1). Default is dlasso.
+}
+  \item{adp}{
+  Logical flag. TRUE to use adaptive adjustment for s. If TRUE then the function ignores the initial s.
+  }
+  \item{lambda}{
+  Optional values for the tuning parameter. A single value or a sequence of values. Useful for manually searching   over user defined set of tuning values. Set to any negative value to activate the automatic setting for  \eqn{\lambda.max} and  \eqn{\lambda.min}.
+  }
+    \item{split}{
+    The number of splits between \eqn{\lambda.min} and \eqn{\lambda.max}.
 }
   \item{maxIter}{
-  The maximum iterations for the algorithm. Default is 300.
+  The maximum iterations for the algorithm. Default is 500.
 }
   \item{adj}{
 Positive value. This value adjusts the upper value for the penalty term, \eqn{adj*\lambda.max}.
 }
-  \item{lambda}{
-  Optional values for the tuning parameter. A single value or a sequence of values. Useful for manually searching over user defined set of tuning values. Set to any negative value to activate the automatic setting for  \eqn{\lambda.max} and  \eqn{\lambda.min}.
-  }
   \item{lowlambda}{
     The lower limit for the tuning parameter. Default is 10^-3.
 }
-  \item{split}{
-    The number of splits between \eqn{\lambda.min} and \eqn{\lambda.max}.
-}
   \item{digit}{
-  The maximum number of digits before setting an estimation to zero. The default is 4 digits.
+  The maximum number of digits before setting an estimation to zero. The default is 5 digits.
 }
+  \item{cauchy}{
+  Logical flag. Set to TRUE to use Cauchy CDF instead of Gaussian one in the penalty function. The default is Gaussian.
+}
+  \item{force}{
+  Logical flag. Set to TRUE to let only decrease in estimation of the parameters. Default is FALSE.
+  }
   \item{trace}{
     Logical flag. If TRUE, output contains some information about the steps. Default is FALSE.
 }
 }
 
 \value{
-  A "dlasso" object of the form of a matrix ( \eqn{\lambda} | s | AIC | BIC | GCV | estimations).
+  A "dlasso" object of the form of a matrix ( \eqn{\lambda} | s | AICc | GIC | BIC | GCV | estimations).
 }
 
 \author{
@@ -67,11 +86,20 @@ Positive value. This value adjusts the upper value for the penalty term, \eqn{ad
 \code{\link{coef.dlasso}},\code{\link{plot.dlasso}}
 }
 \examples{
-  b = c(1:5,rep(0,5))
-  x = matrix(rnorm(10*50),ncol=10)
-  y = x \%*\% b +rnorm(50)
-  object = dlasso(x=x,y=y)
-  plot(object,label=.1,cex=.80)
-  coef(object)
+    # dLASSO
+    r = 5
+    zr= 95
+    n = 50
+    b = c(1:r,rep(0,zr))
+    x = matrix(rnorm((r+zr)*n),ncol=r+zr)
+    y = x \%*\% b +rnorm(n)
+    dLasso = dlasso(x=x,y=y,adp=TRUE)
+    plot(dLasso,label=.1,cex=.80,all = 1)
+    coef(dLasso)
+    # dSCAD
+    dscad = dlasso(x=x,y=y,c=-1,adj=50)
+    plot(dscad,label=.1,cex=.80,all = 1)
+    coef(dscad)
+
 }
 \keyword{ "dlasso" }% use one of  RShowDoc("KEYWORDS")

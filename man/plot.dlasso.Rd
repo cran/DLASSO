@@ -18,10 +18,10 @@
   Show covariate labels on the right hand side of the plot.
 }
   \item{cex.lab}{
-  See "cex.lab"" in "par" function.
+  See "cex.lab" in "par" function.
 }
   \item{all}{
-  Logical flag. If TRUE shows all plots including AIC, BIC, CGV and complete coefficient path. Otherwise the output is a single plot for coefficient path. Default is TRUE.
+  Logical flag. If TRUE shows all plots including AIC, GIC, BIC, CGV and complete coefficient path. Otherwise the output is a single plot for coefficient path. Default is TRUE.
 }
   \item{\dots}{
   Additional arguments for generic plot.

@@ -4,7 +4,7 @@
   Extract coefficients from a fitted dlasso model
 }
 \description{
-While dlasso() produces the entire path of solutions, coef.dlasso extracts a particular point along the path corresponded to the minimum AIC, BIC or GCV.
+While dlasso() produces the entire path of solutions, coef.dlasso extracts a particular point along the path corresponded to the minimum AIC, BIC, GIC or GCV.
 }
 \usage{
 \method{coef}{dlasso}(object , ...)
