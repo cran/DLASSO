@@ -1,6 +1,6 @@
 dlasso  <-  function(x,
                      y,
-                     s  =  1     ,
+                     s  =  1           ,
                      intercept = FALSE ,
                      c  = 1            ,
                      adp = TRUE        ,
@@ -8,37 +8,40 @@ dlasso  <-  function(x,
                      split  = 50       ,
                      maxIter = 500     ,
                      adj = 1.1         ,
-                     lowlambda = 10 ^ -3,
+                     lowlambda = 10^-3 ,
                      digit = 5         ,
                      cauchy = FALSE    ,
-                     force = FALSE     ,
-                     trace = FALSE
-                     )
+                     force = 'auto'    ,
+                     trace = FALSE)
 {
   if (intercept)
-    x = cbind(1, x)
+    x   = cbind(1, x)
 
-  n   =  length(y)
-  ncx =  ncol(x)
+  n     =  length(y)
+  ncx   =  ncol(x)
+  if(force == 'auto'){
+    force = sqrt(n)>2*log(ncx)
+  }
+  #print(sqrt(n)/2/log(ncx))
 
- if(cauchy){
-   fn1  = Sigma3
-   fn2  = Sigma4
- }else{
-   fn1  = Sigma1
-   fn2  = Sigma2
- }
+  if (cauchy) {
+    fn1  = Sigma3
+    fn2  = Sigma4
+  } else{
+    fn1  = Sigma1
+    fn2  = Sigma2
+  }
   if (all(lambda <= 0) | all(is.null(lambda))) {
-    lmax   =  max(abs(cov(y, x))) * adj*n
+    lmax   =  max(abs(cov(y, x))) * adj * n
     lambda =  lseq(lowlambda , lmax  , length.out  =  split)
   } else{
     split  = length(lambda)
   }
-  s  =ifelse(adp,1,s)
+  s  = ifelse(adp, 1, s)
   ls =  length(s)
   ##### initializing ...
   b  =  sqrt(n) * MASS::ginv(t(x) %*% x) %*% t(x) %*% y
-  tmp3 = tmp2 = tmp = b
+  tmp2 = tmp = b
   outputMat  =  matrix(0, ncol  =  ncx + 6 , nrow =  split * ls)
   counter = 1
   if (trace)
@@ -115,7 +118,7 @@ dlasso  <-  function(x,
       tmp2 = b
       tau  = 1
       ll   = n * log(2 * pi * tau) + e / tau
-      aicc = ll + 2 *  n * df *(df+1)/ (n - df - 1)+2*df
+      aicc = ll + 2 *  n * df * (df + 1) / (n - df - 1) + 2 * df
       bic  = ll + log(n) * df
       gcv  = ll / ((1 - df / n) ^ 2)
       gic  = ll  + 2 * df
@@ -146,8 +149,8 @@ dlasso  <-  function(x,
       } else{
         cat('\r ', counter, '|', split * ls, rep(' ', 20))
       }
-      outputMat[counter, ]  =  c(l,  ss, aicc, gic, bic, gcv,
-                                 round(b, digit - 1))
+      outputMat[counter,]  =  c(l,  ss, aicc, gic, bic, gcv,
+                                round(b, digit - 1))
       colnames(outputMat)  =  c(
         'lambda',
         's',
@@ -160,7 +163,7 @@ dlasso  <-  function(x,
       counter  = counter + 1
     }
   }
-  cat('\n Execution in ', Sys.time() - time0, '(s) \n')
+  cat('\n Executed in ', Sys.time() - time0, '(s) \n')
   output = outputMat
   class(output) = 'dlasso'
   return(output)
@@ -185,13 +188,6 @@ plot.dlasso <- function (x,
       xlab = 'Lambda',
       col = 'gray'
     )
-    # # s1  = smooth.spline(object[, 1, drop = FALSE], object[, 3, drop = FALSE], cv = FALSE)
-    #  lines(s1,
-    #        col = 2,
-    #        lty = 3,
-    #        lwd = 2)
-    #  abline(v=s1$x[which.min(s1$y)])
-    #abline(v=object[,1,drop=FALSE],col='gray87',lty=2)
     abline(
       v = object[mean(which(object[, 3, drop = FALSE] == min(object[, 3, drop =
                                                                       FALSE]))), 1] ,
@@ -208,14 +204,6 @@ plot.dlasso <- function (x,
       xlab = 'Lambda',
       col = 'gray'
     )
-    #abline(v=object[,1,drop=FALSE],col='gray87',lty=2)
-    # s2  = smooth.spline(object[, 1, drop = FALSE], object[, 4, drop = FALSE], cv =
-    #                       FALSE)
-    # lines(s2,
-    #       col = 2,
-    #       lty = 3,
-    #       lwd = 2)
-    #abline(v=s2$x[which.min(s2$y)])
     abline(
       v = object[mean(which(object[, 4, drop = FALSE] == min(object[, 4, drop =
                                                                       FALSE]))), 1] ,
@@ -232,14 +220,6 @@ plot.dlasso <- function (x,
       xlab = 'Lambda',
       col = 'gray'
     )
-    #abline(v=object[,1,drop=FALSE],col='gray87',lty=2)
-    # s3  = smooth.spline(object[, 1, drop = FALSE], object[, 5, drop = FALSE], cv =
-    #                       FALSE)
-    # lines(s3,
-    #       col = 2,
-    #       lty = 3,
-    #       lwd = 2)
-    #abline(v=s3$x[which.min(s3$y)])
     abline(
       v = object[mean(which(object[, 5, drop = FALSE] == min(object[, 5, drop =
                                                                       FALSE]))), 1] ,
@@ -256,14 +236,6 @@ plot.dlasso <- function (x,
       xlab = 'Lambda',
       col = 'gray'
     )
-    #abline(v=object[,1,drop=FALSE],col='gray87',lty=2)
-    # s4  = smooth.spline(object[, 1, drop = FALSE], object[, 6, drop = FALSE], cv =
-    #                       FALSE)
-    # lines(s4,
-    #       col = 2,
-    #       lty = 3,
-    #       lwd = 2)
-    #abline(v=s4$x[which.min(s4$y)])
     abline(
       v = object[mean(which(object[, 6, drop = FALSE] == min(object[, 6, drop =
                                                                       FALSE]))), 1] ,
@@ -304,10 +276,10 @@ plot.dlasso <- function (x,
     abline(
       v = s1[which(object[, 4, drop = FALSE] == min(object[, 4, drop = FALSE]))][1],
       col = 2,
-      lty = ifelse(all,2,1),
+      lty = ifelse(all, 2, 1),
       lwd = 1
     )
-    if(all){
+    if (all) {
       abline(
         v = s1[which(object[, 3, drop = FALSE] == min(object[, 3, drop = FALSE]))][1],
         col = 3,

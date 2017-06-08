@@ -17,10 +17,10 @@ dlasso (x,
        split  = 50       ,
        maxIter = 500     ,
        adj = 1.1         ,
-       lowlambda = 10 ^ -3,
-       digit = 5          ,
-       cauchy = FALSE     ,
-       force = FALSE      ,
+       lowlambda = 10^-3 ,
+       digit = 5         ,
+       cauchy = FALSE    ,
+       force = 'auto'    ,
        trace = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -38,7 +38,7 @@ dlasso (x,
   Logical flag. If TRUE, an intercept is included in the model, otherwise no intercept is included. Default is FALSE.
 }
   \item{c}{
-  Choose between dlasso (c=1) and dSCAD (c=-1). Default is dlasso.
+  Choose between dlasso (c=1) and dSCAD (c=-1). Default is dlasso. See futher "force" parameter.
 }
   \item{adp}{
   Logical flag. TRUE to use adaptive adjustment for s. If TRUE then the function ignores the initial s.
@@ -65,7 +65,7 @@ Positive value. This value adjusts the upper value for the penalty term, \eqn{ad
   Logical flag. Set to TRUE to use Cauchy CDF instead of Gaussian one in the penalty function. The default is Gaussian.
 }
   \item{force}{
-  Logical flag. Set to TRUE to let only decrease in estimation of the parameters. Default is FALSE.
+  Logical flag. Set to TRUE to let only a decrease in absolute estimation of the parameters. Default is 'auto' that is only applied if sqrt(n)>2*log(p) for n the number of observations and p the number of parameters.
   }
   \item{trace}{
     Logical flag. If TRUE, output contains some information about the steps. Default is FALSE.

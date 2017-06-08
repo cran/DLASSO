@@ -1,7 +1,7 @@
-14e4dfffb2e9a05c6361f3a3c5bb34f1 *DESCRIPTION
+d315f889d4f640410e33feee4a19ddeb *DESCRIPTION
 194e382190c6440d7bfc2d0afdec3871 *NAMESPACE
-8964a0bac465cd9e9dfb50921428e972 *R/auxilary.R
-7eb3425ea1a162efe3880bf36008f6af *R/main.R
+0a1b18f9a2bb01e5dd10ab23e3e644cc *R/auxilary.R
+3cdb93ac6e397ab3afc6a68d647a860e *R/main.R
 a35ad3614db9cdcbc68b27a06b14c733 *man/coef.dlasso.Rd
-8e11d4e5ea9107d830684ac4566a1d60 *man/dlasso.Rd
+234e72f47f685e36b5f06b4380c51526 *man/dlasso.Rd
 0637f21dd72e83a68d932755f292a56e *man/plot.dlasso.Rd

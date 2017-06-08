@@ -26,8 +26,8 @@ lseq <- function(from = 1,
   return(r)
 }
 compare <- function(x1, x0) {
-  po = which(x1 >= 0)
-  ne = which(x1 <= 0)
+  po = which(x1 > 0)
+  ne = which(x1 < 0)
   x1[po] = pmin(x1[po], x0[po])
   x1[ne] = pmax(x1[ne], x0[ne])
   return(x1)
